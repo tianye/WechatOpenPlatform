@@ -1,0 +1,1 @@
+#文件序列化存储 永久数据 可以增加 Core DatabaseDriver
