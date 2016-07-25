@@ -3,7 +3,7 @@
 
 //http://applist-test-open.weflame.com/authorized.php
 
-include '../vendor/autoload.php';
+include '../../../autoload.php';
 
 use OpenOauth\Authorized;
 use OpenOauth\Core\Config;

@@ -1,6 +1,6 @@
 <?php
 
-include '../vendor/autoload.php';
+include '../../../autoload.php';
 
 use OpenOauth\Core\Config;
 use OpenOauth\OpenAuth;

@@ -1,7 +1,7 @@
 <?php
 //接受第三方平台信息
 
-include '../vendor/autoload.php';
+include '../../../autoload.php';
 
 use OpenOauth\Core\Config;
 use OpenOauth\Decryption;

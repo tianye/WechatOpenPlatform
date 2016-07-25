@@ -1,7 +1,7 @@
 <?php
 //接受服务号回调信息 用于把第三方开放平台测试版 转换为 正式版
 
-include '../vendor/autoload.php';
+include '../../../autoload.php';
 
 use OpenOauth\core\Tools;
 
