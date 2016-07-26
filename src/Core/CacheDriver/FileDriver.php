@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenOauth\core\CacheDriver;
+namespace OpenOauth\Core\CacheDriver;
 
-use OpenOauth\core\CacheDriver\BaseDriver;
+use OpenOauth\Core\CacheDriver\BaseDriver;
 
 /**
  * 文件缓存驱动.
