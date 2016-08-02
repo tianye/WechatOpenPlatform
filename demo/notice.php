@@ -14,7 +14,7 @@ $config->init(['component_app_id' => '第三方平台appId', 'component_app_secr
 
 $cacheDriver    = new \OpenOauth\Core\CacheDriver\RedisDriver(['host' => '127.0.0.1', 'port' => '6379', 'database' => '1']);
 $databaseDriver = new \OpenOauth\Core\DatabaseDriver\RedisDriver(['host' => '127.0.0.1', 'port' => '6379', 'database' => '1']);
-(new Core())->init($cacheDriver, $databaseDriver);
+Core::init($cacheDriver, $databaseDriver);
 
 
 $decryption = new Decryption();

@@ -32,7 +32,7 @@ class Core
      * @param \OpenOauth\Core\CacheDriver\BaseDriver|null    $cacheDriver
      * @param \OpenOauth\Core\DatabaseDriver\BaseDriver|null $databaseDriver
      */
-    public function init(CacheBaseDriver $cacheDriver = null, DatabaseBaseDriver $databaseDriver = null)
+    public static function init(CacheBaseDriver $cacheDriver = null, DatabaseBaseDriver $databaseDriver = null)
     {
         if (!self::$cacheDriver) {
             self::$cacheDriver = empty($cacheDriver) ? new CacheFileDriver(dirname(dirname(dirname(__FILE__))) . '/cache') : $cacheDriver;
@@ -55,6 +55,8 @@ class Core
             }
         } catch (ConfigMistakeException $e) {
             echo $e->getMessage();
+
+            return false;
         }
 
         $configs = Config::$configs;
@@ -65,6 +67,8 @@ class Core
             }
         } catch (ConfigMistakeException $e) {
             echo $e->getMessage();
+
+            return false;
         }
 
         if (!$this->configs) {
