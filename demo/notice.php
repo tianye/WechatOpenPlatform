@@ -11,12 +11,15 @@ use OpenOauth\NotifyProcessing;
 $config = new Config();
 $config->init(['component_app_id' => '第三方平台appId', 'component_app_secret' => '第三方平台appSecret', 'component_app_token' => '第三方平台appToken', 'component_app_key' => '第三方平台appKey']);
 
-$decryption = new Decryption();
+$cacheDriver    = new \OpenOauth\Core\CacheDriver\RedisDriver(['host' => '127.0.0.1', 'port' => '6379', 'database' => '1']);
+$databaseDriver = new \OpenOauth\Core\DatabaseDriver\RedisDriver(['host' => '127.0.0.1', 'port' => '6379', 'database' => '1']);
+
+$decryption = new Decryption($cacheDriver, $databaseDriver);
 $xml_array  = $decryption->decryptionNoticeXML();
 
 Tools::dataRecodes('xml_array', $xml_array, 'notice');
 
-$notify_processing = new NotifyProcessing();
+$notify_processing = new NotifyProcessing($cacheDriver, $databaseDriver);
 switch ($xml_array['InfoType']) {
     case 'component_verify_ticket':
         //每10分钟 接收一次微信推送过来 当前 第三方平台的 ticket 并且缓存

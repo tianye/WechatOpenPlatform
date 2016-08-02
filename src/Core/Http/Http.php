@@ -20,12 +20,6 @@ class Http
             }
         }
 
-//        $php_version = explode('-', phpversion());
-//        $php_version = $php_version[0];
-//        if (strnatcasecmp($php_version, '5.6.0') >= 0) {
-//            curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
-//        }
-
         curl_setopt($ch, CURLOPT_URL, $apiUrl);
         curl_setopt($ch, CURLOPT_TIMEOUT, 60);
         curl_setopt($ch, CURLOPT_HEADER, true);
@@ -43,7 +37,6 @@ class Http
         $body   = $res;
         if ($http_code == 200) {
             list($header, $body) = explode("\r\n\r\n", $res, 2);
-            //list($header, $body) = explode("keep-alive", $res, 2);
             $header = http_parse_headers($header);
         }
 

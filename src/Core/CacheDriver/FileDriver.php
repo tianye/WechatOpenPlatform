@@ -38,7 +38,7 @@ class FileDriver extends BaseDriver
      * 根据缓存名 设置缓存值和超时时间.
      *
      * @param string $name    缓存名
-     * @param mi   $value   缓存值
+     * @param void   $value   缓存值
      * @param int    $expires 超时时间
      *
      * @return boolean;

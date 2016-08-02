@@ -3,6 +3,8 @@ namespace OpenOauth;
 
 use OpenOauth\Core\Core;
 use OpenOauth\Core\Http\Http;
+use OpenOauth\Core\CacheDriver\BaseDriver as CacheBaseDriver;
+use OpenOauth\Core\DatabaseDriver\BaseDriver as DatabaseBaseDriver;
 
 /**
  * 微信Auth相关接口.
@@ -23,9 +25,9 @@ class OpenAuth extends Core
      *
      * @param $authorized_app_id
      */
-    public function __construct($authorized_app_id)
+    public function __construct(CacheBaseDriver $cacheDriver = null, DatabaseBaseDriver $databaseDriver = null, $authorized_app_id)
     {
-        parent::__construct();
+        parent::__construct($cacheDriver, $databaseDriver);
 
         $this->authorized_app_id = $authorized_app_id;
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenOauth\Core\CacheDriver;
+namespace OpenOauth\Core\DatabaseDriver;
 
-use OpenOauth\Core\CacheDriver\BaseDriver;
+use OpenOauth\Core\DatabaseDriver\BaseDriver;
 use OpenOauth\Core\Config;
 use Predis\Client;
 
@@ -15,11 +15,11 @@ class RedisDriver extends BaseDriver
     private $redis;
     private $pre;
 
-    public function __construct($configs = [], $dir = 'Cache:OpenOauth:')
+    public function __construct($configs = [], $dir = 'Database:OpenOauth:')
     {
         parent::__construct($dir);
 
-        $this->pre = $this->cacheDir;
+        $this->pre = $this->databaseDir;
 
         $config = $configs + ['host' => '127.0.0.1', 'port' => '6379', 'database' => '0', 'scheme' => 'tcp', 'auth' => null];
 
@@ -39,7 +39,7 @@ class RedisDriver extends BaseDriver
         }
 
         if (!$this->redis) {
-            exit('Redis初始化连接失败-cache');
+            exit('Redis初始化连接失败-database');
         }
     }
 
@@ -64,22 +64,17 @@ class RedisDriver extends BaseDriver
     /**
      * 根据缓存名 设置缓存值和超时时间.
      *
-     * @param string $name    缓存名
-     * @param void   $value   缓存值
-     * @param int    $expires 超时时间
+     * @param string $name  缓存名
+     * @param void   $value 缓存值
      *
      * @return boolean;
      */
-    public function _set($name, $value, $expires)
+    public function _set($name, $value)
     {
         $name = $this->createFileName($name);
         $data = $this->packData($value);
 
-        if ($expires === 0) {
-            return $this->redis->set($name, $data);
-        }
-
-        return $this->redis->setex($name, $expires, $data);
+        return $this->redis->set($name, $data);
     }
 
     /**

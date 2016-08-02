@@ -2,6 +2,9 @@
 
 namespace OpenOauth\Core;
 
+use OpenOauth\Core\CacheDriver\BaseDriver as CacheBaseDriver;
+use OpenOauth\Core\DatabaseDriver\BaseDriver as DatabaseBaseDriver;
+
 use OpenOauth\Core\CacheDriver\FileDriver as CacheFileDriver;
 use OpenOauth\Core\DatabaseDriver\FileDriver as DatabaseFileDriver;
 use OpenOauth\Core\Config;
@@ -24,10 +27,10 @@ class Core
      * Core constructor.
      *
      */
-    function __construct()
+    public function __construct(CacheBaseDriver $cacheDriver = null, DatabaseBaseDriver $databaseDriver = null)
     {
-        self::$cacheDriver    = new CacheFileDriver(dirname(dirname(dirname(__FILE__))) . '/cache');
-        self::$databaseDriver = new DatabaseFileDriver(dirname(dirname(dirname(__FILE__))) . '/database');
+        self::$cacheDriver    = empty($cacheDriver) ? new CacheFileDriver(dirname(dirname(dirname(__FILE__))) . '/cache') : $cacheDriver;
+        self::$databaseDriver = empty($databaseDriver) ? new DatabaseFileDriver(dirname(dirname(dirname(__FILE__))) . '/database') : $databaseDriver;
 
         $configs = Config::$configs;
         try {
