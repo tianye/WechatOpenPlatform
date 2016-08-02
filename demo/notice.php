@@ -4,6 +4,7 @@
 include '../../../autoload.php';
 
 use OpenOauth\Core\Config;
+use OpenOauth\Core\Core;
 use OpenOauth\Decryption;
 use OpenOauth\Core\Tools;
 use OpenOauth\NotifyProcessing;
@@ -13,13 +14,15 @@ $config->init(['component_app_id' => '第三方平台appId', 'component_app_secr
 
 $cacheDriver    = new \OpenOauth\Core\CacheDriver\RedisDriver(['host' => '127.0.0.1', 'port' => '6379', 'database' => '1']);
 $databaseDriver = new \OpenOauth\Core\DatabaseDriver\RedisDriver(['host' => '127.0.0.1', 'port' => '6379', 'database' => '1']);
+(new Core())->init($cacheDriver, $databaseDriver);
 
-$decryption = new Decryption($cacheDriver, $databaseDriver);
+
+$decryption = new Decryption();
 $xml_array  = $decryption->decryptionNoticeXML();
 
 Tools::dataRecodes('xml_array', $xml_array, 'notice');
 
-$notify_processing = new NotifyProcessing($cacheDriver, $databaseDriver);
+$notify_processing = new NotifyProcessing();
 switch ($xml_array['InfoType']) {
     case 'component_verify_ticket':
         //每10分钟 接收一次微信推送过来 当前 第三方平台的 ticket 并且缓存

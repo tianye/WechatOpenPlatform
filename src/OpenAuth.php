@@ -25,9 +25,9 @@ class OpenAuth extends Core
      *
      * @param $authorized_app_id
      */
-    public function __construct(CacheBaseDriver $cacheDriver = null, DatabaseBaseDriver $databaseDriver = null, $authorized_app_id)
+    public function __construct($authorized_app_id)
     {
-        parent::__construct($cacheDriver, $databaseDriver);
+        parent::__construct();
 
         $this->authorized_app_id = $authorized_app_id;
     }

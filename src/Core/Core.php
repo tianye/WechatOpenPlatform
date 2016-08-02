@@ -3,6 +3,7 @@
 namespace OpenOauth\Core;
 
 use OpenOauth\Core\CacheDriver\BaseDriver as CacheBaseDriver;
+use OpenOauth\Core\CacheDriver\BaseDriver;
 use OpenOauth\Core\DatabaseDriver\BaseDriver as DatabaseBaseDriver;
 
 use OpenOauth\Core\CacheDriver\FileDriver as CacheFileDriver;
@@ -17,22 +18,47 @@ class Core
     /** @var  object */
     public           $configs;
     protected static $error;
+    /** @var  BaseDriver */
     protected static $cacheDriver;
+    /** @var  DatabaseBaseDriver */
     protected static $databaseDriver;
 
     const GET_COMPONENT_ACCESS_TOKEN  = 'https://api.weixin.qq.com/cgi-bin/component/api_component_token'; //获取第三方token
     const GET_COMPONENT_PRE_AUTH_CODE = 'https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode'; //获取第三方auth_code
 
     /**
+     * 初始化 缓存 数据库 配置
+     *
+     * @param \OpenOauth\Core\CacheDriver\BaseDriver|null    $cacheDriver
+     * @param \OpenOauth\Core\DatabaseDriver\BaseDriver|null $databaseDriver
+     */
+    public function init(CacheBaseDriver $cacheDriver = null, DatabaseBaseDriver $databaseDriver = null)
+    {
+        if (!self::$cacheDriver) {
+            self::$cacheDriver = empty($cacheDriver) ? new CacheFileDriver(dirname(dirname(dirname(__FILE__))) . '/cache') : $cacheDriver;
+        }
+
+        if (!self::$databaseDriver) {
+            self::$databaseDriver = empty($databaseDriver) ? new DatabaseFileDriver(dirname(dirname(dirname(__FILE__))) . '/database') : $databaseDriver;
+        }
+    }
+
+    /**
      * Core constructor.
      *
      */
-    public function __construct(CacheBaseDriver $cacheDriver = null, DatabaseBaseDriver $databaseDriver = null)
+    public function __construct()
     {
-        self::$cacheDriver    = empty($cacheDriver) ? new CacheFileDriver(dirname(dirname(dirname(__FILE__))) . '/cache') : $cacheDriver;
-        self::$databaseDriver = empty($databaseDriver) ? new DatabaseFileDriver(dirname(dirname(dirname(__FILE__))) . '/database') : $databaseDriver;
+        try {
+            if (!self::$cacheDriver || !self::$databaseDriver) {
+                throw new ConfigMistakeException('未初始化init 缓存 数据库 配置');
+            }
+        } catch (ConfigMistakeException $e) {
+            echo $e->getMessage();
+        }
 
         $configs = Config::$configs;
+
         try {
             if (!isset($configs['component_app_id']) || !isset($configs['component_app_secret']) || !isset($configs['component_app_token']) || !isset($configs['component_app_key'])) {
                 throw new ConfigMistakeException();
