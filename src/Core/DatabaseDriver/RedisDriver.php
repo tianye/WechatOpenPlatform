@@ -32,11 +32,11 @@ class RedisDriver extends BaseDriver
                 'port'   => $config['port'],
             ]);
 
-        $this->redis->select($config['database']);
-
         if (!empty($config['auth'])) {
             $this->redis->auth($config['auth']);
         }
+
+        $this->redis->select($config['database']);
 
         if (!$this->redis) {
             exit('Redis初始化连接失败-database');
