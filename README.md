@@ -12,7 +12,7 @@
 </p>
 
 ####一句话安装:
-`composer require tianye/open-oauth dev-master -vvv`
+`composer require tianye/open-oauth -vvv`
 
 接入其他 第三方微信SDK包方案:
 ```
