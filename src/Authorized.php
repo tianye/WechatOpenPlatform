@@ -13,11 +13,11 @@ class Authorized extends Core
     /**
      * @param $redirect_path
      */
-    function getAuthHTML($redirect_path)
+    public function getAuthHTML($redirect_path)
     {
         $component_app_id = $this->configs->component_app_id;
         $pre_auth_code    = $this->getComponentPreAuthCode();
-        $redirect_uri     = $_SERVER['HTTP_HOST'] . '/' . $redirect_path;
+        $redirect_uri     = $this->current() . $redirect_path;
 
         $editorSrc = <<<HTML
          <script language="JavaScript" type="text/javascript">
@@ -27,6 +27,21 @@ HTML;
         exit($editorSrc);
     }
 
+    public function current()
+    {
+        $protocol = (!empty($_SERVER['HTTPS'])
+            && $_SERVER['HTTPS'] !== 'off'
+            || $_SERVER['SERVER_PORT'] === 443) ? 'https://' : 'http://';
+
+        if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+            $host = $_SERVER['HTTP_X_FORWARDED_HOST'];
+        } else {
+            $host = $_SERVER['HTTP_HOST'];
+        }
+
+        return $protocol . $host . '/';
+    }
+
     /**
      * 使用授权码换取公众号的接口调用凭据和授权信息
      *
@@ -34,7 +49,7 @@ HTML;
      *
      * @return array|bool|null|string|void
      */
-    function getApiQueryAuth($authorizer_app_id = '')
+    public function getApiQueryAuth($authorizer_app_id = '')
     {
         $time = time();
 

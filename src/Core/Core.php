@@ -120,26 +120,26 @@ class Core
      */
     public function getComponentPreAuthCode()
     {
-        $component_pre_auth_code = self::$cacheDriver->_get('component_pre_auth_code:' . $this->configs->component_app_id);
+        $component_access_token = $this->getComponentAccessToken();
+
+        $query_data   = http_build_query(['component_access_token' => $component_access_token]);
+        $request_data = [
+            'component_appid' => $this->configs->component_app_id,
+        ];
+
+        $response_data = Http::_post(self::GET_COMPONENT_PRE_AUTH_CODE . '?' . $query_data, $request_data);
+        if (!$response_data || !is_array($response_data) || empty($response_data)) {
+            $this->setError(Http::$error);
+
+            return false;
+        }
+
+        $component_pre_auth_code = $response_data['pre_auth_code'];
 
         if (false == $component_pre_auth_code) {
-            $component_access_token = $this->getComponentAccessToken();
-
-            $query_data   = http_build_query(['component_access_token' => $component_access_token]);
-            $request_data = [
-                'component_appid' => $this->configs->component_app_id,
-            ];
-
-            $response_data = Http::_post(self::GET_COMPONENT_PRE_AUTH_CODE . '?' . $query_data, $request_data);
-            if (!$response_data || !is_array($response_data) || empty($response_data)) {
-                $this->setError(Http::$error);
-
-                return false;
-            }
-
-            self::$cacheDriver->_set('component_pre_auth_code:' . $this->configs->component_app_id, $response_data['pre_auth_code'], 5000);
-
-            $component_pre_auth_code = $response_data['pre_auth_code'];
+            $component_pre_auth_code = self::$cacheDriver->_get('component_pre_auth_code:' . $this->configs->component_app_id);
+        } else {
+            self::$cacheDriver->_set('component_pre_auth_code:' . $this->configs->component_app_id, $component_pre_auth_code, 5000);
         }
 
         return $component_pre_auth_code;

@@ -1,30 +1,32 @@
 <?php
-function dataRecodes($title, $data, $path)
-{
-    $handler = fopen(dirname(dirname(__FILE__)) . '/logs/' . $path . '/oauth' . date('Y-m-d', time()) . '.log', 'a+');
-    $content = "================" . $title . "===================\n";
-    if (is_string($data) === true) {
-        $content .= $data . "\n";
-    }
-    if (is_array($data) === true) {
-        forEach ($data as $k => $v) {
-            if (is_array($v)) {
-                $v = json_encode($v);
+if (!function_exists('dataRecodes')) {
+    function dataRecodes($title, $data, $path)
+    {
+        $handler = fopen(dirname(dirname(__FILE__)) . '/logs/' . $path . '/oauth' . date('Y-m-d', time()) . '.log', 'a+');
+        $content = "================" . $title . "===================\n";
+        if (is_string($data) === true) {
+            $content .= $data . "\n";
+        }
+        if (is_array($data) === true) {
+            forEach ($data as $k => $v) {
+                if (is_array($v)) {
+                    $v = json_encode($v);
+                }
+                $content .= "key: " . $k . " value: " . $v . "\n";
             }
-            $content .= "key: " . $k . " value: " . $v . "\n";
         }
-    }
-    if (is_bool($data) === true) {
-        if ($data) {
-            $content .= "true\n";
-        } else {
-            $content .= "false\n";
+        if (is_bool($data) === true) {
+            if ($data) {
+                $content .= "true\n";
+            } else {
+                $content .= "false\n";
+            }
         }
-    }
-    $flag = fwrite($handler, $content);
-    fclose($handler);
+        $flag = fwrite($handler, $content);
+        fclose($handler);
 
-    return $flag;
+        return $flag;
+    }
 }
 
 /*
