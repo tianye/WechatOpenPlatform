@@ -61,7 +61,7 @@ HTML;
         if (!empty($query_auth_info)) {
 
             //没超时 返回数据
-            if ($query_auth_info['expired_time'] >= ($time - 1000) && $query_auth_info['authorization_state'] == 'authorized') {
+            if ($query_auth_info['expired_time'] >= ($time + 1000) && $query_auth_info['authorization_state'] == 'authorized') {
                 return $query_auth_info;
             } else {
                 //如果超时了 获取新的 access_token 和 新的 刷新令牌 refresh_token
