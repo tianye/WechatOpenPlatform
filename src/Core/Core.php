@@ -83,13 +83,13 @@ class Core
     /**
      * 获取开放平台 ComponentAccessToken
      *
-     * @return bool|null|string|void
+     * @return bool|mixed
      */
     public function getComponentAccessToken()
     {
-        //$component_access_token = self::$cacheDriver->_get('component_access_token:' . $this->configs->component_app_id);
+        $component_access_token = self::$cacheDriver->_get('component_access_token:' . $this->configs->component_app_id);
 
-       // if (false == $component_access_token) {
+        if (false == $component_access_token) {
 
             $request_data = [
                 'component_appid'         => $this->configs->component_app_id,
@@ -105,10 +105,10 @@ class Core
                 return false;
             }
 
-            //self::$cacheDriver->_set('component_access_token:' . $this->configs->component_app_id, $response_data['component_access_token'], 5000);
+            self::$cacheDriver->_set('component_access_token:' . $this->configs->component_app_id, $response_data['component_access_token'], 5000);
 
             $component_access_token = $response_data['component_access_token'];
-        //}
+        }
 
         return $component_access_token;
     }
